@@ -7,7 +7,7 @@
 
 test <- function(modelList, dat_test){
   
-  ### Fit the classfication model with testing data
+  ### Fit the classfication model with test data
   
   ### Input: 
   ###  - the fitted classification model list using training data
