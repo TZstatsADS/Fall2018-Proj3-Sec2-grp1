@@ -2,7 +2,6 @@
 ### Fit the regression model with testing data ###
 ######################################################
 
-### Author: Chengliang Tang
 ### Project 3
 
 test <- function(modelList, dat_test){

@@ -2,7 +2,6 @@
 ### Train a classification model with training features ###
 #########################################################
 
-### Author: Chengliang Tang
 ### Project 3
 
 

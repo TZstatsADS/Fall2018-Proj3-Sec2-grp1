@@ -2,7 +2,6 @@
 ### Cross Validation ###
 ########################
 
-### Author: Chengliang Tang
 ### Project 3
 
 cv.function <- function(X.train, y.train, d, K){
