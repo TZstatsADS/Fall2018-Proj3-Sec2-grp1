@@ -24,7 +24,12 @@ Term: Fall 2018
 	+ The portability of this AI program (holding storage and memory cost)
 	+ The computational efficiency (test running time cost)
 
-	
+**Goal and Performance Example**:
+
+![image](figs/goal.png)
+
+![image](figs/modelexample.png)
+
 **Contribution statement**: ([default](doc/a_note_on_contributions.md)) (Alphabetically)
 
 Min Jin: Designed feature.R and superResolution.R along with transfering all codes to Python to improve speed.
