@@ -3,7 +3,6 @@
 #########################################################
 
 ### Project 3
-###install.packages("randomForest")
 
 train <- function(dat_train, label_train, par=NULL){
   
@@ -15,9 +14,8 @@ train <- function(dat_train, label_train, par=NULL){
   ### Output: a list for trained models
   ### load libraries
   library("gbm")
-  library("randomForest")
-  ##install.packages("caret") 
-  ##install.packages("e1071") 
+  #install.packages("caret") 
+  #install.packages("e1071") 
   library(caret)
   library(e1071)
   library(xgboost)

@@ -27,6 +27,7 @@ Term: Fall 2018
 + Goal and Performance Example
 ![image](figs/HRexample1.png)
 ![image](figs/HRexample2.png)
+![image](figs/eva.png)
 
 **Contribution statement**: ([default](doc/a_note_on_contributions.md)) (Alphabetically)
 
