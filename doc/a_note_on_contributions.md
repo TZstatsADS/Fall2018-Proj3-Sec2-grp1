@@ -23,10 +23,10 @@ Min Jin, Wenting Yu and Lingyi Zhao all designed feature.R part.
 
 Min Jin and Wenting Yu designed superResolution part. feature.R and superResolution parts are used for baseline. 
 
-Wenting Yu discussed with group members and tune parameters for baseline model (gbm model). 
+Wenting Yu discussed with group members and tune parameters for baseline model (gbm model). Wenting gave the FINAL version of baseline model.  
 
-Atishay Sehgal tried to design CNN and xgboost models and also tuned parameters for them. 
+Atishay Sehgal tried to design svm and xgboost models and cnn.R. He also tried to tune parameters for them. 
 
 Min Jin tried to transfer all codes to Python to improve speed. 
 
-Lingyi Zhao designed xgboost model and random forest model as well as tuned parameter for xgboost. 
+Lingyi Zhao designed xgboost model and random forest model as well as tuned parameter for xgboost. Lingyi gave FINAL version of xgboost model.

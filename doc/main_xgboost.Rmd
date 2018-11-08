@@ -1,8 +1,10 @@
 ---
 title: "Project3"
-author: "Lingyi Zhao Group1"
+author: "Group1: Min Jin, Atishay Sehgal, Wenting Yu, Lingyi Zhao, Yukun Pei"
 date: "2018/10/23"
-output: word_document
+output:
+  html_notebook:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -11,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## R Markdown
+
+#### Required Packages:
 
 ```{r}
 if(!require("EBImage")){
@@ -63,6 +67,8 @@ run.feature.train=TRUE
 run.feature.test=TRUE 
 ```
 
+###Step 2: import training images class labels.
+
 ```{r}
 #model_values<-seq(2,6,by=2) #depth for GBM
 #model_values<-seq(0.01,0.31,by=0.1) #eta for xgboost
@@ -82,7 +88,6 @@ model_labels = paste("xgboost with numTrees =", model_values)
 #model_labels = paste("GBM with depth =", model_values)
 ```
 
-###Step 2: import training images class labels.
 
 ### Step 3: construct features and responses
 
@@ -123,7 +128,7 @@ source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/test
 
 #### Model selection with cross-validation
 
-* Do model selection by choosing among different values of training model parameters, that is, the interaction depth for GBM in this example. 
+* Do model selection by choosing among different values of training model parameters, that is, the Max.depth, eta and nrounds for XGBOOST in this example. 
 
 ```{r runcv, message=FALSE, warning=FALSE}
 source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/cross_validation.R")
@@ -141,6 +146,7 @@ if(run.cv){
 ```
 
 Visualize cross-validation results. 
+
 ```{r cv_vis}
 if(run.cv){
   load("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/err_cv.RData")
@@ -169,7 +175,8 @@ if(run.cv){
 ```
 
 
-* Choose the "best"" parameter value
+* Choose the "best"" parameter value for nrounds and max.depth
+
 ```{r best_model}
 #model_best=model_values
 if(run.cv){
@@ -180,6 +187,7 @@ par_best
 ```
 
 * Train the model with the entire training set using the selected model (model parameter) via cross-validation.
+
 ```{r final_train, warning=FALSE}
 tm_train=NA
 tm_train <- system.time(fit_train <- train(feat_train, label_train, par_best))
@@ -193,6 +201,7 @@ Feed the final training model with the completely holdout testing data.
   + Input: a path that points to the folder (empty) of high-resolution test images.
   + Input: an R object that contains tuned predictors.
   + Output: construct high-resolution versions for each low-resolution test image.
+  
 ```{r superresolution}
 source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/superResolution.R")
 source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/test.R")
@@ -213,8 +222,6 @@ MSE
 PSNR<-20*log10(1)-10*log10(MSE)
 PSNR
 ```
-
-
 
 ####Summarize running time
 
