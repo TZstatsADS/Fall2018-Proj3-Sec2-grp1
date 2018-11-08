@@ -1,0 +1,217 @@
+---
+title: "Project3"
+author: "Lingyi Zhao Group1"
+date: "2018/10/23"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+rm(list = ls())
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+if(!require("EBImage")){
+  source("https://bioconductor.org/biocLite.R")
+  biocLite("EBImage")
+}
+if(!require("gbm")){
+  install.packages("gbm")
+}
+if(!require("xgboost")){
+  install.packages("xgboost")
+}
+library("EBImage")
+library("gbm")
+library("xgboost")
+#install.packages("abind")
+library(abind)
+```
+
+
+### Step 0: specify directories.
+
+```{r}
+set.seed(2018)
+setwd("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1")
+
+train_dir <- "/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/data/train_set/" 
+train_LR_dir <- paste(train_dir, "LR/", sep="")
+train_HR_dir <- paste(train_dir, "HR/", sep="")
+train_label_path <- paste(train_dir, "label.csv", sep="") 
+
+#train_HR_dir
+```
+
+### Step 1: set up controls for evaluation experiments.
+
+In this chunk, we have a set of controls for the evaluation experiments. 
+
++ (T/F) cross-validation on the training set
++ (number) K, the number of CV folds
++ (T/F) process features for training set
++ (T/F) run evaluation on an independent test set
++ (T/F) process features for test set
+
+```{r}
+run.cv=TRUE 
+K <- 3
+run.test=TRUE 
+run.feature.train=TRUE 
+run.feature.test=TRUE 
+```
+
+```{r}
+#model_values<-seq(2,6,by=2) #depth for GBM
+#model_values<-seq(0.01,0.31,by=0.1) #eta for xgboost
+df <- data.frame(matrix(ncol = 2, nrow = 9))
+x <- c("nrounds", "depth")
+colnames(df) <- x
+#nrounds = seq(20, 100, 30) 
+nrounds<-c(5,7,11)
+depth <-c(2,5,8)
+eta <- 0.5
+df$nrounds <- rep(nrounds, each = length(depth))
+df$depth <- rep(rep(depth), length(nrounds))
+df$eta <- rep(eta, length(nrounds)*length(depth))
+model_values <- df
+model_labels = paste("xgboost with numTrees =", model_values)
+
+#model_labels = paste("GBM with depth =", model_values)
+```
+
+###Step 2: import training images class labels.
+
+### Step 3: construct features and responses
+
+```{r}
+source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/feature.R")
+tm_feature_train <- NA
+if(run.feature.train){
+  tm_feature_train <- system.time(dat_train <- feature(train_LR_dir, train_HR_dir))
+  feat_train <- dat_train$feature
+  label_train <- dat_train$label
+}
+save(dat_train, file="/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/feature_train.RData")
+
+#load("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/feature_train.RData")
+#feat_train<-dat_train$feature
+#label_train<-dat_train$label
+```
+
+
+### Step 4: import training and testing sets.
+
+Call the train model and test model from library. 
+
+`train.R` and `test.R` should be wrappers for all your model training steps and your classification/prediction steps. 
++ `train.R`
+  + Input: a path that points to the training set features and responses.
+  + Output: an RData file that contains trained classifiers in the forms of R objects: models/settings/links to external trained configurations.
++ `test.R`
+  + Input: a path that points to the test set features.
+  + Input: an R object that contains a trained classifier.
+  + Output: an R object of response predictions on the test set. If there are multiple classifiers under evaluation, there should be multiple sets of label predictions. 
+```{r loadlib}
+source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/train.R")
+source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/test.R")
+```
+
+### Step 5: Train a regression model with training features and responses.
+
+#### Model selection with cross-validation
+
+* Do model selection by choosing among different values of training model parameters, that is, the interaction depth for GBM in this example. 
+
+```{r runcv, message=FALSE, warning=FALSE}
+source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/cross_validation.R")
+if(run.cv){
+  err_cv <- array(dim=c(nrow(model_values), 2))
+  for(k in 1:nrow(model_values)){
+    cat("k=", k, "\n")
+    err_cv[k,] <- cv.function(feat_train, label_train, 
+                              depth=model_values$depth,
+                              nrounds=model_values$nrounds,
+                              K)
+  }
+  save(err_cv, file="/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/err_cv.RData")
+}
+```
+
+Visualize cross-validation results. 
+```{r cv_vis}
+if(run.cv){
+  load("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/err_cv.RData")
+  #err_cv<-data.frame(err_cv)
+  parasname<-c("nrounds", "depth")
+  for ( para in parasname){
+  plot(model_values[,para], err_cv[,1], xlab="Interaction Depth", ylab="CV Error",
+       main="Cross Validation Error", type="n", ylim=c(0, 0.25))
+  points(model_values[,para], err_cv[,1], col="blue", pch=16)
+  lines(model_values[,para], err_cv[,1], col="blue")
+  arrows(model_values[,para], err_cv[,1]-err_cv[,2], model_values[,para], err_cv[,1]+err_cv[,2], 
+        length=0.1, angle=90, code=3)
+  }
+}
+```
+
+
+* Choose the "best"" parameter value
+```{r best_model}
+#model_best=model_values
+if(run.cv){
+  model_best <- model_values[which.min(err_cv[,1]),]
+}
+par_best <- list( depth=model_best$depth, nrounds=model_best$nrounds)
+par_best
+```
+
+* Train the model with the entire training set using the selected model (model parameter) via cross-validation.
+```{r final_train, warning=FALSE}
+tm_train=NA
+tm_train <- system.time(fit_train <- train(feat_train, label_train, par_best))
+save(fit_train, file="/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/fit_train.RData")
+```
+
+
+Feed the final training model with the completely holdout testing data. 
++ `superResolution.R`
+  + Input: a path that points to the folder of low-resolution test images.
+  + Input: a path that points to the folder (empty) of high-resolution test images.
+  + Input: an R object that contains tuned predictors.
+  + Output: construct high-resolution versions for each low-resolution test image.
+```{r superresolution}
+source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/superResolution.R")
+source("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/lib/test.R")
+test_dir <- "/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/data/test_set/" # This will be modified for different data sets.
+test_LR_dir <- paste(test_dir, "LR/", sep="")
+#print(test_LR_dir)
+test_HR_dir <- paste(test_dir, "HR/", sep="")
+#test_LR_dir<-
+tm_test=NA
+if(run.test){
+  load(file="/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/fit_train.RData")
+  tm_test <- system.time(superResolution(test_LR_dir, test_HR_dir, fit_train))
+  
+}
+
+MSE<-err_cv[which.min(err_cv[,1]),1]
+MSE
+PSNR<-20*log10(1)-10*log10(MSE)
+PSNR
+```
+
+
+
+####Summarize running time
+
+```{r}
+cat("Time for constructing training features=", tm_feature_train[1], "s \n")
+cat("Time for constructing testing features=", tm_feature_test[1], "s \n")
+cat("Time for training model=", tm_train[1], "s \n")
+cat("Time for super-resolution=", tm_test[1], "s \n")
+```
+
+
