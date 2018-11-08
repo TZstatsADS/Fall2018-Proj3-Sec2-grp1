@@ -1,7 +1,7 @@
 ---
-title: "Project 3 - Example Main Script"
-author: "Chengliang Tang, Tian Zheng"
-output:
+title: "Project3"
+author: "Group1: Min Jin, Atishay Sehgal, Wenting Yu, Lingyi Zhao, Yukun Pei"
+date: "2018/10/23"
   html_notebook:
     df_print: paged
 ---
@@ -18,6 +18,10 @@ if(!require("EBImage")){
 
 if(!require("gbm")){
   install.packages("gbm")
+}
+
+if(!require("caret")){
+  install.packages("caret")
 }
 
 library("EBImage")

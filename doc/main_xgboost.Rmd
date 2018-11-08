@@ -24,6 +24,15 @@ if(!require("EBImage")){
 if(!require("gbm")){
   install.packages("gbm")
 }
+
+if(!require("caret")){
+  install.packages("caret")
+}
+
+if(!require("e1071")){
+  install.packages("e1071")
+}
+
 if(!require("xgboost")){
   install.packages("xgboost")
 }
@@ -39,7 +48,7 @@ library(abind)
 
 ```{r}
 set.seed(2018)
-train_dir <- "./data/train_set/" 
+train_dir <- "../data/train_set/" 
 train_LR_dir <- paste(train_dir, "LR/", sep="")
 train_HR_dir <- paste(train_dir, "HR/", sep="")
 train_label_path <- paste(train_dir, "label.csv", sep="") 
