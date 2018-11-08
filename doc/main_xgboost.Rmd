@@ -39,8 +39,6 @@ library(abind)
 
 ```{r}
 set.seed(2018)
-setwd("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1")
-
 train_dir <- "./data/train_set/" 
 train_LR_dir <- paste(train_dir, "LR/", sep="")
 train_HR_dir <- paste(train_dir, "HR/", sep="")
@@ -92,14 +90,15 @@ model_labels = paste("xgboost with numTrees =", model_values)
 ### Step 3: construct features and responses
 
 ```{r}
-source("./lib/feature.R")
+source("../lib/feature.R")
 tm_feature_train <- NA
 if(run.feature.train){
   tm_feature_train <- system.time(dat_train <- feature(train_LR_dir, train_HR_dir))
+  load("../output/feature_train.RData")
   feat_train <- dat_train$feature
   label_train <- dat_train$label
 }
-save(dat_train, file="./output/feature_train.RData")
+save(dat_train, file="../output/feature_train.RData")
 
 #load("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/feature_train.RData")
 #feat_train<-dat_train$feature
@@ -120,8 +119,8 @@ Call the train model and test model from library.
   + Input: an R object that contains a trained classifier.
   + Output: an R object of response predictions on the test set. If there are multiple classifiers under evaluation, there should be multiple sets of label predictions. 
 ```{r loadlib}
-source("./lib/train.R")
-source("./lib/test.R")
+source("../lib/train_xgboost.R")
+source("../lib/test_xgboost.R")
 ```
 
 ### Step 5: Train a regression model with training features and responses.
@@ -131,7 +130,7 @@ source("./lib/test.R")
 * Do model selection by choosing among different values of training model parameters, that is, the Max.depth, eta and nrounds for XGBOOST in this example. 
 
 ```{r runcv, message=FALSE, warning=FALSE}
-source("./lib/cross_validation.R")
+source("../lib/cross_validation.R")
 if(run.cv){
   err_cv <- array(dim=c(nrow(model_values), 2))
   for(k in 1:nrow(model_values)){
@@ -141,7 +140,7 @@ if(run.cv){
                               nrounds=model_values$nrounds,
                               K)
   }
-  save(err_cv, file="./output/err_cv.RData")
+  save(err_cv, file="../output/err_cv.RData")
 }
 ```
 
@@ -149,7 +148,7 @@ Visualize cross-validation results.
 
 ```{r cv_vis}
 if(run.cv){
-  load("./output/err_cv.RData")
+  load("../output/err_cv.RData")
   
   plot(model_values[c(1,2,3),2], err_cv[c(1,2,3),1], xlab="Max.Depth", ylab="CV Error",
        main="Cross Validation Error for nrounds=5", type="n", ylim=c(min(err_cv[c(1,2,3),1]-err_cv[c(1,2,3),2]-0.00001),max(err_cv[c(1,2,3),1]+err_cv[c(1,2,3),2]+0.00001)))
@@ -178,6 +177,7 @@ if(run.cv){
 * Choose the "best"" parameter value for nrounds and max.depth
 
 ```{r best_model}
+load("../output/err_cv.RData")
 #model_best=model_values
 if(run.cv){
   model_best <- model_values[which.min(err_cv[,1]),]
@@ -189,9 +189,14 @@ par_best
 * Train the model with the entire training set using the selected model (model parameter) via cross-validation.
 
 ```{r final_train, warning=FALSE}
+source("../lib/train_xgboost.R")
+load("../output/feature_train.RData")
+feat_train <- dat_train$feature
+label_train <- dat_train$label
+  
 tm_train=NA
 tm_train <- system.time(fit_train <- train(feat_train, label_train, par_best))
-save(fit_train, file="./output/fit_train.RData")
+save(fit_train, file="../output/fit_train.RData")
 ```
 
 
@@ -203,16 +208,16 @@ Feed the final training model with the completely holdout testing data.
   + Output: construct high-resolution versions for each low-resolution test image.
   
 ```{r superresolution}
-source("./lib/superResolution.R")
-source("./lib/test.R")
-test_dir <- "./data/test_set/" # This will be modified for different data sets.
+source("../lib/superResolution.R")
+source("../lib/test.R")
+test_dir <- "../data/test_set/" # This will be modified for different data sets.
 test_LR_dir <- paste(test_dir, "LR/", sep="")
 #print(test_LR_dir)
-test_HR_dir <- paste(test_dir, "HR/", sep="")
+test_HR_dir <- paste(test_dir, "HR_XGBoost/", sep="")
 #test_LR_dir<-
 tm_test=NA
 if(run.test){
-  load(file="./output/fit_train.RData")
+  load(file="../output/fit_train.RData")
   tm_test <- system.time(superResolution(test_LR_dir, test_HR_dir, fit_train))
   
 }
@@ -227,7 +232,7 @@ PSNR
 
 ```{r}
 cat("Time for constructing training features=", tm_feature_train[1], "s \n")
-cat("Time for constructing testing features=", tm_feature_test[1], "s \n")
+#cat("Time for constructing testing features=", tm_feature_test[1], "s \n")
 cat("Time for training model=", tm_train[1], "s \n")
 cat("Time for super-resolution=", tm_test[1], "s \n")
 ```
