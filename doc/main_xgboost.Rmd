@@ -144,16 +144,27 @@ Visualize cross-validation results.
 ```{r cv_vis}
 if(run.cv){
   load("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/err_cv.RData")
-  #err_cv<-data.frame(err_cv)
-  parasname<-c("nrounds", "depth")
-  for ( para in parasname){
-  plot(model_values[,para], err_cv[,1], xlab="Interaction Depth", ylab="CV Error",
-       main="Cross Validation Error", type="n", ylim=c(0, 0.25))
-  points(model_values[,para], err_cv[,1], col="blue", pch=16)
-  lines(model_values[,para], err_cv[,1], col="blue")
-  arrows(model_values[,para], err_cv[,1]-err_cv[,2], model_values[,para], err_cv[,1]+err_cv[,2], 
+  
+  plot(model_values[c(1,2,3),2], err_cv[c(1,2,3),1], xlab="Max.Depth", ylab="CV Error",
+       main="Cross Validation Error for nrounds=5", type="n", ylim=c(min(err_cv[c(1,2,3),2]-err_cv[c(1,2,3),2]+0.0030),max(err_cv[c(1,2,3),1]+err_cv[c(1,2,3),2])))
+  points(model_values[c(1,2,3),2], err_cv[c(1,2,3),1], col="blue", pch=16)
+  lines(model_values[c(1,2,3),2], err_cv[c(1,2,3),1], col="blue")
+  arrows(model_values[c(1,2,3),2], err_cv[c(1,2,3),1]-err_cv[c(1,2,3),2], model_values[c(1,2,3),2], err_cv[c(1,2,3),1]+err_cv[c(1,2,3),2], 
         length=0.1, angle=90, code=3)
-  }
+  
+  plot(model_values[4:6,2], err_cv[4:6,1], xlab="Max.Depth", ylab="CV Error",
+       main="Cross Validation Error for nrounds=7", type="n", ylim=c(min(err_cv[4:6,2]-err_cv[4:6,2]+0.00304),max(err_cv[4:6,1]+err_cv[4:6,2]+0.0000001)))
+  points(model_values[4:6,2], err_cv[4:6,1], col="blue", pch=16)
+  lines(model_values[4:6,2], err_cv[4:6,1], col="blue")
+  arrows(model_values[4:6,2], err_cv[4:6,1]-err_cv[4:6,2], model_values[4:6,2], err_cv[4:6,1]+err_cv[4:6,2], 
+        length=0.1, angle=90, code=3)
+  
+  plot(model_values[7:9,2], err_cv[7:9,1], xlab="Max.Depth", ylab="CV Error",
+       main="Cross Validation Error for nrounds=11", type="n", ylim=c(min(err_cv[7:9,2]-err_cv[7:9,2]+0.00305),max(err_cv[7:9,1]+err_cv[7:9,2]+0.0000001)))
+  points(model_values[7:9,2], err_cv[7:9,1], col="blue", pch=16)
+  lines(model_values[7:9,2], err_cv[7:9,1], col="blue")
+  arrows(model_values[7:9,2], err_cv[7:9,1]-err_cv[7:9,2], model_values[7:9,2], err_cv[7:9,1]+err_cv[7:9,2], 
+        length=0.1, angle=90, code=3)
 }
 ```
 
