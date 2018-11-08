@@ -152,12 +152,15 @@ Visualize cross-validation results.
 ```{r cv_vis}
 if(run.cv){
   load("../output/err_cv_baseline.RData")
-  plot(model_values, err_cv_new[,1], xlab="Interaction Depth", ylab="CV Error",
-       main="Cross Validation Error", type="n", ylim=c(0, 0.25))
-  points(model_values, err_cv_new[,1], col="blue", pch=16)
-  lines(model_values, err_cv_new[,1], col="blue")
-  arrows(model_values, err_cv_new[,1]-err_cv_new[,2], model_values, err_cv_new[,1]+err_cv_new[,2], 
-        length=0.1, angle=90, code=3)
+  plot(1:36, err_cv[,1], xlab="minNode", ylab="CV Error",
+     main="CV Error for BGM with depth = 1", type="n",xaxt = "n")
+  axis(1, at=seq(1,36,by=1), labels=df$minNode)
+  points(1:12, err_cv[1:12,1], col="red", pch=16)
+  points(13:24, err_cv[13:24,1], col="blue", pch=16)
+  points(25:36, err_cv[25:36,1], col="brown", pch=16)
+  lines(1:36, err_cv[,1], col="black", type = 'b')
+  legend("topright", legend=paste('numTrees = ', levels(as.factor(df$numTrees)) ), pch=16, col=c("red", "blue", "black"))
+
 }
 
 ```
