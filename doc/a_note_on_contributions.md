@@ -29,4 +29,6 @@ Atishay Sehgal tried to design svm and xgboost models and cnn.R. He also tried t
 
 Min Jin tried to transfer all codes to Python to improve speed. 
 
+Yukun Pei did the final presentation, made ppt and debugged baseline model.
+
 Lingyi Zhao designed xgboost model and random forest model as well as tuned parameter for xgboost. Lingyi gave FINAL version of xgboost model.

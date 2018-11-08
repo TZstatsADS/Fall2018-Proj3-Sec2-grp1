@@ -29,7 +29,7 @@ Term: Fall 2018
 
 Min Jin: Designed feature.R and superResolution.R along with transfering all codes to Python to improve speed.
 
-Yukun Pei (Presenter): 
+Yukun Pei (Presenter): Presentation, tuned parameters, debugged baseline model from other group members and make PPT of presentation.
 
 Atishay Sehgal: Worked on SVM, XGBoost and CNN as baseline improvements. Worked on tuning parameters for the same. 
 
