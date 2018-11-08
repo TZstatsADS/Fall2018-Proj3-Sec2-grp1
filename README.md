@@ -27,15 +27,15 @@ Term: Fall 2018
 	
 **Contribution statement**: ([default](doc/a_note_on_contributions.md)) (Alphabetically)
 
-Min Jin: designed feature.R part and superResolution part. Also try to transfer all codes to Python to improve speed.
+Min Jin: Designed feature.R and superResolution.R along with transfering all codes to Python to improve speed.
 
 Yukun Pei (Presenter): 
 
-Atishay Sehgal: attempted to design svm and xgboost models and cnn.R. He also tried to tune parameters for them. 
+Atishay Sehgal: Worked on SVM, XGBoost and CNN as baseline improvements. Worked on tuning parameters for the same. 
 
-Wenting Yu: designed feature.R and superResolution.R part. She tuned parameters for baseline model (gbm model) and gave the FINAL VERSION of baseline model.  
+Wenting Yu: Designed feature.R and superResolution.R part. Tuned parameters for baseline model (gbm model) and gave the FINAL VERSION of baseline model.  
 
-Lingyi Zhao: designed xgboost model and random forest model as well as tuned parameter for xgboost and gave FINAL VERSION of xgboost model.
+Lingyi Zhao: Designed xgboost and random forest models. Tuned parameters for xgboost and gave FINAL VERSION of xgboost model.
 
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
