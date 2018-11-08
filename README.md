@@ -24,9 +24,8 @@ Term: Fall 2018
 	+ The portability of this AI program (holding storage and memory cost)
 	+ The computational efficiency (test running time cost)
 
-**Goal and Performance Example**:
-![image](figs/goal2.png)
-![image](figs/modelexample.png)
++ Goal and Performance Example
+![image](figs/HRexample.png)
 
 **Contribution statement**: ([default](doc/a_note_on_contributions.md)) (Alphabetically)
 
