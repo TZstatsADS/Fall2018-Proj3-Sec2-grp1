@@ -7,4 +7,7 @@ The data directory contains data used in the analysis. This is treated as read o
 + Training data can be downloaded from here:  https://www.dropbox.com/s/7agsll3t5t7spkr/train_set.zip?dl=0
 + Test data can be downloaded from here:        https://www.dropbox.com/s/s2u6e7t9vsis8d6/test_SecTwo.zip?dl=0
 + Folders are renamed and organized as:  
-      +  test_set + LR |  HR
+      +  add train_set from the link above
+      +  test_set + LR |  HR | HR_XGBoost
+      + replace LR folder in test_set with LR folder from https://www.dropbox.com/s/s2u6e7t9vsis8d6/test_SecTwo.zip?dl=0
+      
