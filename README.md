@@ -16,7 +16,7 @@ Term: Fall 2018
 + Project summary: In this project, our client is interested in creating an mobile AI program that can enhance the resolution of blurry and low-resolution images. we created a classification engine for enhancement of the resolution of images. We implemented a baseline Gradient Boosting Model and some of the improvements we offer are using XGBoost and Support Vector Machines.
 + Project goal: Produce a predicted high resolution image as output based on the low-resolution input that is as close to the ground truth as possible.
 + Model used:
-	+ Baseline: GBM(depth = 1, ntree = 100, minNode = 140, shrinkage = 0.09)
+	+ Baseline: GBM(depth = 1, ntree = 100, minNode = 14, shrinkage = 0.09)
 	+ Improvement: XGBoost(depth = 5, nrounds = 11, eta = 0.5)
 	+ Other try: Random Forest, SVM and CNN
 + Model evaluation: Peak Signal-to-noise Ratio (PSNR) and Mean Squared Error (MSE)
