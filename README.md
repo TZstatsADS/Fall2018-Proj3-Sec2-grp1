@@ -25,7 +25,7 @@ Term: Fall 2018
 	+ The computational efficiency (test running time cost)
 
 **Goal and Performance Example**:
-![image](figs/goal.png)
+![image](figs/goal2.png)
 ![image](figs/modelexample.png)
 
 **Contribution statement**: ([default](doc/a_note_on_contributions.md)) (Alphabetically)
