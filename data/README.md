@@ -10,7 +10,7 @@ The data directory contains data used in the analysis. This is treated as read o
 
         +  add train_set from the link above
         
-        +  test_set + LR |  HR | HR_XGBoost
+        +  test_set { LR |  HR | HR_XGBoost }
         
         + replace LR folder in test_set with LR folder from https://www.dropbox.com/s/s2u6e7t9vsis8d6/test_SecTwo.zip?dl=0
       
