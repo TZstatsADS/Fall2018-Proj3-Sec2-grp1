@@ -1,7 +1,7 @@
 ---
-title: "Project 3 - Example Main Script"
-author: "Chengliang Tang, Tian Zheng"
-output:
+title: "Project3"
+author: "Group1: Min Jin, Atishay Sehgal, Wenting Yu, Lingyi Zhao, Yukun Pei"
+date: "2018/10/23"
   html_notebook:
     df_print: paged
 ---
@@ -18,6 +18,10 @@ if(!require("EBImage")){
 
 if(!require("gbm")){
   install.packages("gbm")
+}
+
+if(!require("caret")){
+  install.packages("caret")
 }
 
 library("EBImage")
@@ -108,7 +112,7 @@ if(run.feature.train){
   label_train <- dat_train$label
 }
 
-#save(dat_train, file="../output/feature_train_baseline.RData")
+#save(dat_train, file="../output/feature_train.RData")
 ```
 
 
@@ -152,12 +156,15 @@ Visualize cross-validation results.
 ```{r cv_vis}
 if(run.cv){
   load("../output/err_cv_baseline.RData")
-  plot(model_values, err_cv_new[,1], xlab="Interaction Depth", ylab="CV Error",
-       main="Cross Validation Error", type="n", ylim=c(0, 0.25))
-  points(model_values, err_cv_new[,1], col="blue", pch=16)
-  lines(model_values, err_cv_new[,1], col="blue")
-  arrows(model_values, err_cv_new[,1]-err_cv_new[,2], model_values, err_cv_new[,1]+err_cv_new[,2], 
-        length=0.1, angle=90, code=3)
+  plot(1:36, err_cv[,1], xlab="minNode", ylab="CV Error",
+     main="CV Error for BGM with depth = 1", type="n",xaxt = "n")
+  axis(1, at=seq(1,36,by=1), labels=df$minNode)
+  points(1:12, err_cv[1:12,1], col="red", pch=16)
+  points(13:24, err_cv[13:24,1], col="blue", pch=16)
+  points(25:36, err_cv[25:36,1], col="brown", pch=16)
+  lines(1:36, err_cv[,1], col="black", type = 'b')
+  legend("topright", legend=paste('numTrees = ', levels(as.factor(df$numTrees)) ), pch=16, col=c("red", "blue", "black"))
+
 }
 
 ```
@@ -205,14 +212,14 @@ if(run.test){
 ### Summarize Running Time
 Prediction performance matters, so does the running times for constructing features and for training the model, especially when the computation resource is limited. 
 ```{r running_time}
-load("../output/err_cv_new.RData")
+load("../output/err_cv_baseline.RData")
 mse_baseline <- err_cv[which.min(err_cv[,1]),1]
 PSNR_baseline <- 20 * log10(1) - 10 * log10(mse_baseline)
 mse_baseline
 PSNR_baseline
 
 cat("Time for constructing training features=", tm_feature_train[1], "s \n")
-cat("Time for constructing testing features=", tm_feature_test[1], "s \n")
+#cat("Time for constructing testing features=", tm_feature_test[1], "s \n")
 cat("Time for training model=", tm_train[1], "s \n")
 cat("Time for super-resolution=", tm_test[1], "s \n")
 ```

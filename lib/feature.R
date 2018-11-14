@@ -1,4 +1,9 @@
+########################
+###      Feature     ###
+########################
 
+### Author: Wenting Yu/ Min Jin
+### Project 3
 
 
 feature <- function(LR_dir, HR_dir, n_points=1000){
@@ -42,13 +47,7 @@ feature <- function(LR_dir, HR_dir, n_points=1000){
     col_idx <- sample(dim(imgLR)[2], n_points, replace = TRUE)
     HR_ridx <- 2*row_idx
     HR_cidx <- 2*col_idx
-    
-    # imgLR_padded <- array(0, c(nrow_LR+2, ncol_LR+2, 3))
-    # imgLR_padded[ , , 1]<- rbind(rep(0, ncol_LR+2), cbind(rep(0, nrow_LR), as.matrix(imgLR[ , , 1]), rep(0, nrow_LR)), rep(0, ncol_LR+2))
-    # imgLR_padded[ , , 2]<- rbind(rep(0, ncol_LR+2), cbind(rep(0, nrow_LR), as.matrix(imgLR[ , , 2]), rep(0, nrow_LR)), rep(0, ncol_LR+2))
-    # imgLR_padded[ , , 3]<- rbind(rep(0, ncol_LR+2), cbind(rep(0, nrow_LR), as.matrix(imgLR[ , , 3]), rep(0, nrow_LR)), rep(0, ncol_LR+2))
-    
-    
+
     ### Zero Padding LR images for feature extraction
     imgLR <- abind(array(0, replace(dim(imgLR), 2, 1)),imgLR, array(0, replace(dim(imgLR), 2, 1)), along = 2)
     imgLR_padded <- abind(array(0, replace(dim(imgLR), 1, 1)),imgLR, array(0, replace(dim(imgLR), 1, 1)), along = 1)

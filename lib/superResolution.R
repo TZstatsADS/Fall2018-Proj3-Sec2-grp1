@@ -1,3 +1,9 @@
+########################
+### super Resolution ###
+########################
+
+### Author: Wenting Yu/ Min Jin
+### Project 3
 
 
 

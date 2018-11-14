@@ -2,7 +2,7 @@
 ### Train a classification model with training features ###
 #########################################################
 
-### Author: Chengliang Tang
+### Author: Wenting Yu
 ### Project 3
 
 
@@ -14,10 +14,6 @@ train <- function(dat_train, label_train, par=NULL){
   ###  -  features from LR images 
   ###  -  responses from HR images
   ### Output: a list for trained models       、
-  
-  
-
-  
   
   
   ### load libraries

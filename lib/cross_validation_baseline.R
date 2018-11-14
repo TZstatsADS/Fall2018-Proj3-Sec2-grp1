@@ -2,7 +2,7 @@
 ### Cross Validation ###
 ########################
 
-### Author: Chengliang Tang
+### Author: Wenting Yu
 ### Project 3
 
 cv.function <- function(X.train, y.train, K, depth, numTrees, minNode, shrinkage){
