@@ -46,6 +46,10 @@ train_LR_dir <- paste(train_dir, "LR/", sep="")
 train_HR_dir <- paste(train_dir, "HR/", sep="")
 train_label_path <- paste(train_dir, "label.csv", sep="") 
 
+test_dir <- "./data/train_set/" 
+test_LR_dir <- paste(test_dir, "LR/", sep="")
+test_HR_dir <- paste(test_dir, "HR/", sep="")
+test_label_path <- paste(test_dir, "label.csv", sep="") 
 #train_HR_dir
 ```
 
@@ -92,6 +96,7 @@ model_labels = paste("xgboost with numTrees =", model_values)
 ### Step 3: construct features and responses
 
 ```{r}
+setwd("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1")
 source("./lib/feature.R")
 tm_feature_train <- NA
 if(run.feature.train){
@@ -101,9 +106,9 @@ if(run.feature.train){
 }
 save(dat_train, file="./output/feature_train.RData")
 
-#load("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/feature_train.RData")
-#feat_train<-dat_train$feature
-#label_train<-dat_train$label
+load("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1/output/feature_train.RData")
+feat_train<-dat_train$feature
+label_train<-dat_train$label
 ```
 
 
@@ -120,6 +125,7 @@ Call the train model and test model from library.
   + Input: an R object that contains a trained classifier.
   + Output: an R object of response predictions on the test set. If there are multiple classifiers under evaluation, there should be multiple sets of label predictions. 
 ```{r loadlib}
+setwd("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1")
 source("./lib/train.R")
 source("./lib/test.R")
 ```
@@ -183,12 +189,13 @@ if(run.cv){
   model_best <- model_values[which.min(err_cv[,1]),]
 }
 par_best <- list( depth=model_best$depth, nrounds=model_best$nrounds)
-par_best
+par_best<-list(depth=8, nrounds=11)
 ```
 
 * Train the model with the entire training set using the selected model (model parameter) via cross-validation.
 
 ```{r final_train, warning=FALSE}
+setwd("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1")
 tm_train=NA
 tm_train <- system.time(fit_train <- train(feat_train, label_train, par_best))
 save(fit_train, file="./output/fit_train.RData")
@@ -203,6 +210,7 @@ Feed the final training model with the completely holdout testing data.
   + Output: construct high-resolution versions for each low-resolution test image.
   
 ```{r superresolution}
+setwd("/Users/lingyizhao/Documents/GitHub/Fall2018-Proj3-Sec2--group_1")
 source("./lib/superResolution.R")
 source("./lib/test.R")
 test_dir <- "./data/test_set/" # This will be modified for different data sets.
@@ -227,7 +235,7 @@ PSNR
 
 ```{r}
 cat("Time for constructing training features=", tm_feature_train[1], "s \n")
-cat("Time for constructing testing features=", tm_feature_test[1], "s \n")
+#cat("Time for constructing testing features=", tm_feature_test[1], "s \n")
 cat("Time for training model=", tm_train[1], "s \n")
 cat("Time for super-resolution=", tm_test[1], "s \n")
 ```
